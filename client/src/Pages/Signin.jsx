@@ -52,6 +52,7 @@ const Signin = () => {
             backgroundColor: "#000000",
             color: "white",
           }}
+          onClick={handleSubmit}
         >
           Sign In
         </Button>
