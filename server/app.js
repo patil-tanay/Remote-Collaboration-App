@@ -12,8 +12,12 @@ app.use(cookieParser());
 
 //Routes
 import userRoute from "./Routes/userRoute.js";
+import messageRoute from "./Routes/messageRoutes.js";
+import chatRoute from "./Routes/chatRoutes.js";
 
 //Routes Declaration
 app.use("/api/v1/users", userRoute);
+app.use("/api/v1/message", messageRoute);
+app.use("/api/v1/chat", chatRoute);
 
 export default app;
