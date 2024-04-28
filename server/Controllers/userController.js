@@ -6,8 +6,9 @@ import apiResponse from "../Utils/apiResponse.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+
     user.refreshToken = refreshToken;
     await user.save({
       validateBeforeSave: false,
@@ -39,12 +40,14 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new apiError(400, "User already exists");
   }
 
-  const createdUser = User.create({ name, email, password });
+  const createdUser = await User.create({ name, email, password });
   if (!createdUser) {
     throw new apiError(500, "User registration failed");
   }
 
-  const registeredUser = await User.findOne({ email }).select("-password");
+  const registeredUser = await User.findOne({ email }).select(
+    "-password -refreshToken"
+  );
 
   return res
     .status(201)
@@ -98,4 +101,27 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser };
+const logOutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: { refreshToken: undefined },
+    },
+    {
+      new: true,
+    }
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new apiResponse(200, "User Logged Out", {}));
+});
+
+export { registerUser, loginUser, logOutUser };

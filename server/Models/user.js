@@ -45,9 +45,17 @@ UserSchema.methods.checkPassword = async function (password) {
 };
 
 UserSchema.methods.generateAccessToken = async function () {
-  return jwt.sign({ id: this._id }, process.env.ACCESSTOKENSECRET, {
-    expiresIn: process.env.ACCESSTOKENEXPIRES,
-  });
+  return jwt.sign(
+    {
+      id: this._id,
+      email: this.email,
+      name: this.name,
+    },
+    process.env.ACCESSTOKENSECRET,
+    {
+      expiresIn: process.env.ACCESSTOKENEXPIRES,
+    }
+  );
 };
 
 UserSchema.methods.generateRefreshToken = async function () {

@@ -32,7 +32,8 @@
 }
 
 .email-input,
-.password-input {
+.password-input,
+.username-input {
     width: 300px;
 }
 
