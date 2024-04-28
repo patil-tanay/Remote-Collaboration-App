@@ -5,6 +5,7 @@ import { Button, TextField, Container } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
+import axios from "axios";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -40,6 +41,7 @@ const Signup = () => {
     } catch (error) {
       // Handle the error here
     }
+
   };
 
   return (
