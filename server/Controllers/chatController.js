@@ -6,7 +6,7 @@ import { UploadOnCloudinary } from "../Utils/cloudinary.js";
 import ApiResponse from "../Utils/apiResponse.js";
 
 const accessChat = asyncHandler(async (req, res) => {
-  const { userId } = req.user;
+  const { userId } = req.body;
 
   if (!userId) {
     throw new apiError(400, "UserId param not sent with request");

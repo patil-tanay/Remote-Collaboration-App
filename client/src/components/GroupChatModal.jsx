@@ -37,12 +37,12 @@ const GroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     if (query) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/users?search=${searchQuery}`,
+          `http://localhost:5000/api/v1/users?search=${searchQuery}`,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${user.accessToken}`,
             },
           }
         );
@@ -99,11 +99,11 @@ const GroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
       };
       const { data } = await axios.post(
-        `/api/chat/group`,
+        `http://localhost:5000/api/v1/chat/group`,
         {
           name: groupChatName,
           users: JSON.stringify(groupChatMembers.map((u) => u._id)),
@@ -146,7 +146,7 @@ const GroupChatModal = ({ fetchAgain, setFetchAgain }) => {
         <Button onClick={handleOpen}>
           <AddIcon
             sx={{
-              color: "#E5D6F4",
+              color: "black",
               width: "30px",
               height: "30px",
             }}
