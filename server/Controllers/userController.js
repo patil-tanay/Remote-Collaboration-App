@@ -6,8 +6,9 @@ import apiResponse from "../Utils/apiResponse.js";
 const generateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+
     user.refreshToken = refreshToken;
     await user.save({
       validateBeforeSave: false,
@@ -93,11 +94,32 @@ const loginUser = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options)
     .json(
       new apiResponse(200, "User Logged in Successfully", {
-        user: loggedInUser,
-        accessToken,
-        refreshToken,
+        user: { loggedInUser, accessToken, refreshToken },
       })
     );
 });
 
-export { registerUser, loginUser };
+const logOutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: { refreshToken: undefined },
+    },
+    {
+      new: true,
+    }
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new apiResponse(200, "User Logged Out", {}));
+});
+
+export { registerUser, loginUser, logOutUser };
