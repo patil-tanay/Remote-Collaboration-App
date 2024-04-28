@@ -83,6 +83,8 @@ const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken"
   );
 
+  loggedInUser.accessToken = accessToken;
+
   const options = {
     httpOnly: true,
     secure: true,
@@ -92,11 +94,26 @@ const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(
-      new apiResponse(200, "User Logged in Successfully", {
-        user: { loggedInUser, accessToken, refreshToken },
-      })
-    );
+    .json({
+      _id: loggedInUser._id,
+      name: loggedInUser.name,
+      email: loggedInUser.email,
+      accessToken,
+    });
+});
+
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
 });
 
 const logOutUser = asyncHandler(async (req, res) => {
@@ -122,4 +139,4 @@ const logOutUser = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, "User Logged Out", {}));
 });
 
-export { registerUser, loginUser, logOutUser };
+export { registerUser, loginUser, logOutUser, allUsers };
