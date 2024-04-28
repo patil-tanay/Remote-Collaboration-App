@@ -2,6 +2,8 @@ import { asyncHandler } from "../Utils/asyncHandler.js";
 import { Chat } from "../Models/chatSchema.js";
 import { User } from "../Models/user.js";
 import apiError from "../Utils/apiError.js";
+import { UploadOnCloudinary } from "../Utils/cloudinary.js";
+import ApiResponse from "../Utils/apiResponse.js";
 
 const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.user;
@@ -156,6 +158,21 @@ const removeFromGroup = asyncHandler(async (req, res) => {
   }
 }); //Responsible for removing a user to a group
 
+const sendFiles = asyncHandler(async (req, res) => {
+  console.log(req.user);
+  const localfilePath = req.file?.path;
+  if (!localfilePath) {
+    throw new apiError(400, "No files uploaded");
+  }
+  const file = await UploadOnCloudinary(localfilePath);
+  if (!file.url) {
+    throw new apiError(401, "Error, while uploading file on cloudinary");
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "File uploaded successfully", file.url));
+}); //Responsible for sending files to a chat
+
 export {
   accessChat,
   fetchChat,
@@ -163,4 +180,5 @@ export {
   renameGroup,
   addToGroup,
   removeFromGroup,
+  sendFiles,
 };
