@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <img src="\src\assets\collaborative.png" alt="Logo" width={"45px"} />
+        <img src="src\assets\collaborative.png" alt="Logo" width={"45px"} />
         Colabo.
       </div>
       <ul className="nav-links">
