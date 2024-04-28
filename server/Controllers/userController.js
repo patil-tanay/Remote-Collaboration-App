@@ -39,12 +39,14 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new apiError(400, "User already exists");
   }
 
-  const createdUser = User.create({ name, email, password });
+  const createdUser = await User.create({ name, email, password });
   if (!createdUser) {
     throw new apiError(500, "User registration failed");
   }
 
-  const registeredUser = await User.findOne({ email }).select("-password");
+  const registeredUser = await User.findOne({ email }).select(
+    "-password -refreshToken"
+  );
 
   return res
     .status(201)
