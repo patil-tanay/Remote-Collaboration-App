@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, TextField, Container } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import "./Signup.css";
+import axios from "axios";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +24,25 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your signup logic here
+
+    axios.post("http://localhost:5000/api/v1/users/register", {
+      name: username,
+      email: email,
+      password: password,
+    });
+    //   .then((response) => {
+    //     // Handle the response from your API
+    //     if (response.data.success) {
+    //       alert("Signup successful");
+    //       // Redirect the user to the login page, or log them in
+    //     } else {
+    //       alert(`Signup failed: ${response.data.message}`);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //     alert("An error occurred. Please try again.");
+    //   });
   };
 
   return (
