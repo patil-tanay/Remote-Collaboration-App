@@ -5,6 +5,7 @@ import "./Signup.css";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleEmailChange = (e) => {
@@ -13,6 +14,10 @@ const Signup = () => {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -32,6 +37,15 @@ const Signup = () => {
             type="email"
             value={email}
             onChange={handleEmailChange}
+          />
+        </div>
+        <div className="form-field">
+          <TextField
+            className="username-input"
+            label="Username"
+            type="text"
+            value={username}
+            onChange={handleUsernameChange}
           />
         </div>
         <div className="form-field">
