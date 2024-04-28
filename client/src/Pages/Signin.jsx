@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Button, TextField, Container } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import "./Signin.css";
+import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Signin = () => {
@@ -18,10 +19,22 @@ const Signin = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your signin logic here
-    nav("/user");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/users/login",
+        { email, password }
+      );
+      // Handle the response as needed
+      console.log(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      if (response.status == 200) nav("/user");
+    } catch (error) {
+      // Handle the error
+      console.error(error);
+    }
   };
 
   return (
