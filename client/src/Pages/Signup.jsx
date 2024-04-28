@@ -1,7 +1,9 @@
+import axios from "axios";
 /* eslint-disable */
 import React, { useState } from "react";
 import { Button, TextField, Container } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 import axios from "axios";
 
@@ -9,7 +11,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const nav = useNavigate();
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -22,27 +24,24 @@ const Signup = () => {
     setUsername(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/users/register",
+        {
+          name: username,
+          email: email,
+          password: password,
+        }
+      );
+      if (response.status === 201) nav("/signin");
+      console.log(response);
+      // Handle the response here
+    } catch (error) {
+      // Handle the error here
+    }
 
-    axios.post("http://localhost:5000/api/v1/users/register", {
-      name: username,
-      email: email,
-      password: password,
-    });
-    //   .then((response) => {
-    //     // Handle the response from your API
-    //     if (response.data.success) {
-    //       alert("Signup successful");
-    //       // Redirect the user to the login page, or log them in
-    //     } else {
-    //       alert(`Signup failed: ${response.data.message}`);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //     alert("An error occurred. Please try again.");
-    //   });
   };
 
   return (
