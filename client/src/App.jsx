@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./Components/Navbar";
+/* eslint-disable no-unused-vars */
+import Navbar from "./components/Navbar";
 import LandingPage from "./Pages/LandingPage";
 import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
