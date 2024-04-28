@@ -24,7 +24,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
     if (query) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/users?search=${searchQuery}`,
+          `http://localhost:5000/api/v1/users?search=${searchQuery}`,
           {
             method: "GET",
             headers: {
@@ -119,9 +119,11 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
 
   return (
     <>
-      <Button onClick={handleOpen}>
-        <MoreHorizIcon sx={{ color: "#EDE4F5", fontSize: "30px" }} />
-      </Button>
+      <MoreHorizIcon
+        onClick={handleOpen}
+        sx={{ color: "black", fontSize: "30px" }}
+      />
+
       <Modal
         open={open}
         onClose={handleClose}

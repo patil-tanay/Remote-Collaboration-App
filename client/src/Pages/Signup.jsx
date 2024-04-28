@@ -5,7 +5,6 @@ import { Button, TextField, Container } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
-import axios from "axios";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -35,13 +34,12 @@ const Signup = () => {
           password: password,
         }
       );
-      if (response.status === 201) nav("/signin");
       console.log(response);
+      if (response.status === 201) nav("/signin");
       // Handle the response here
     } catch (error) {
       // Handle the error here
     }
-
   };
 
   return (

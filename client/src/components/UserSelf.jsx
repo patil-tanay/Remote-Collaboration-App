@@ -25,8 +25,8 @@ const UserSelf = ({ user }) => {
               marginTop: 2,
               width: 34,
               height: 34,
-              color: "var(--background-2)",
-              backgroundColor: "var(--background)",
+              color: "black",
+              backgroundColor: "#d3d3d3",
             }}
           >
             {user && user.name[0]}
