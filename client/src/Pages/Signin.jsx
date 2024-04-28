@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { Button, TextField, Container } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import "./Signin.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const nav = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -19,6 +21,7 @@ const Signin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add your signin logic here
+    nav("/user");
   };
 
   return (
@@ -53,6 +56,7 @@ const Signin = () => {
             backgroundColor: "#000000",
             color: "white",
           }}
+          onClick={handleSubmit}
         >
           Sign In
         </Button>
