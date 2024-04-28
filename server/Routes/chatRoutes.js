@@ -1,5 +1,5 @@
 import express from "express";
-import { protect } from "../middleware/authMiddlewares.js";
+import { verifyJWT } from "../Middlewares/auth.js";
 import {
   accessChat,
   fetchChat,
@@ -7,14 +7,14 @@ import {
   renameGroup,
   addToGroup,
   removeFromGroup,
-} from "../Controllers/chatControllers.js";
+} from "../Controllers/chatController.js";
 const router = express.Router();
 
-router.route("/").post(protect, accessChat);
-router.route("/").get(protect, fetchChat);
-router.route("/group").post(protect, createGroupChat);
-router.route("/rename").put(protect, renameGroup);
-router.route("/groupremove").put(protect, removeFromGroup);
-router.route("/groupadd").put(protect, addToGroup);
+router.route("/").post(verifyJWT, accessChat);
+router.route("/").get(verifyJWT, fetchChat);
+router.route("/group").post(verifyJWT, createGroupChat);
+router.route("/rename").put(verifyJWT, renameGroup);
+router.route("/groupremove").put(verifyJWT, removeFromGroup);
+router.route("/groupadd").put(verifyJWT, addToGroup);
 
 export default router;
