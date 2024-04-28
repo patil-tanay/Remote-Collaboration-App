@@ -1,15 +1,17 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField, Container } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import "./Signin.css";
 import axios from "axios";
+import { ChatState } from "../context/Chatprovider";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const nav = useNavigate();
+  const { user, setUser } = ChatState();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -29,13 +31,21 @@ const Signin = () => {
       );
       // Handle the response as needed
       console.log(response.data);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
       if (response.status == 200) nav("/user");
     } catch (error) {
       // Handle the error
       console.error(error);
     }
   };
+  useEffect(() => {
+    const userInfo = localStorage.getItem("user");
+    if (userInfo) {
+      setUser(JSON.parse(userInfo));
+      nav("/user");
+    }
+  }, []);
 
   return (
     <div className="signin-container">

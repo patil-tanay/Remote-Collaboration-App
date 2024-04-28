@@ -4,7 +4,7 @@ import { User } from "../Models/user.js";
 import apiError from "../Utils/apiError.js";
 
 const accessChat = asyncHandler(async (req, res) => {
-  const { userId } = req.user;
+  const { userId } = req.body;
 
   if (!userId) {
     throw new apiError(400, "UserId param not sent with request");
