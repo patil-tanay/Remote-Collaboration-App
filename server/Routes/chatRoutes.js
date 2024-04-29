@@ -1,5 +1,6 @@
-import express from "express";
+import { Router } from "express";
 import { verifyJWT } from "../Middlewares/auth.js";
+
 import {
   accessChat,
   fetchChat,
@@ -8,7 +9,8 @@ import {
   addToGroup,
   removeFromGroup,
 } from "../Controllers/chatController.js";
-const router = express.Router();
+
+const router = Router();
 
 router.route("/").post(verifyJWT, accessChat);
 router.route("/").get(verifyJWT, fetchChat);
