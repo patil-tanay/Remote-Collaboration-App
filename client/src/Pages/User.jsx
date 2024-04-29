@@ -16,6 +16,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/MoveToInbox";
 import Avatar from "@mui/material/Avatar";
 import HomeIcon from "@mui/icons-material/Home";
+import DescriptionIcon from "@mui/icons-material/Description";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -53,6 +54,7 @@ import Switch from "@mui/material/Switch";
 import UserSelf from "../components/UserSelf";
 import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
+import AddTaskIcon from "@mui/icons-material/AddTask";
 import axios from "axios";
 // import { handleVideo, handleVoice } from "../config/CallLogics";
 // import useLocalStorage from "use-local-storage";
@@ -243,13 +245,33 @@ export default function Chatpanel() {
           {selectedChat && (
             <div
               style={{
-                marginLeft: "62%",
+                marginLeft: "58%",
                 display: "flex",
                 gap: "15px",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
+              <IconButton
+                onClick={() => {
+                  window.open(
+                    `https://rca-chat-frontend.vercel.app/editor/${selectedChat._id}`
+                  );
+                }}
+              >
+                <DescriptionIcon
+                  sx={{
+                    fontSize: "38px",
+                  }}
+                />
+              </IconButton>
+              <IconButton>
+                <AddTaskIcon
+                  sx={{
+                    fontSize: "38px",
+                  }}
+                />
+              </IconButton>
               <IconButton onClick={() => handleVideo(selectedChat._id)}>
                 <VideocamIcon
                   sx={{

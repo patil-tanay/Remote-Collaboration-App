@@ -15,7 +15,7 @@ import { useLocation } from "react-router-dom";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "black", // Change this to your desired primary color
+      main: "#000", // Change this to your desired primary color
     },
     secondary: {
       main: "#d3d3d3", // Change this to your desired secondary color

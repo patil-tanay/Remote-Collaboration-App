@@ -18,7 +18,7 @@ import * as typingAnimation from "../animations/typer.json";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-
+import FileUploadButton from "./FileUpload";
 const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
 
@@ -76,6 +76,10 @@ const SingleChat = ({ selectedChat }) => {
     socket.on("stop typing", () => {
       setIsTyping(false);
     });
+
+    // return () => {
+    //   socket.off("share file");
+    // };
   }, []);
 
   useEffect(() => {
@@ -95,6 +99,10 @@ const SingleChat = ({ selectedChat }) => {
       } else {
         setMessages([...messages, newMessageRecieved]);
       }
+    });
+    socket.on("share file", (fileUrl) => {
+      // Update your messages state with the new file message
+      setMessages([...messages, { content: fileUrl, isFile: true }]);
     });
   });
 
@@ -218,7 +226,7 @@ const SingleChat = ({ selectedChat }) => {
                 }}
               />
             </IconButton>
-
+            <FileUploadButton />
             <Paper
               component="form"
               sx={{
