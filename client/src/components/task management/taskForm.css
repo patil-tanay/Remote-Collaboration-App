@@ -1,0 +1,56 @@
+/* taskForm.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-task-form {
+  width: 400px;
+  padding: 40px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-task-form h2 {
+  margin-bottom: 30px;
+  text-align: center;
+  color: #333333;
+}
+
+.create-task-form form {
+  margin-top: 20px;
+}
+
+.create-task-form .form-group {
+  margin-bottom: 20px;
+}
+
+.create-task-form .form-label {
+  font-weight: bold;
+  color: #333333;
+}
+
+.create-task-form .form-control {
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.create-task-form .btn-primary {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
+.create-task-form .btn-primary:hover {
+  background-color: #0056b3;
+}

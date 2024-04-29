@@ -4,7 +4,7 @@ import { asyncHandler } from "../Utils/asyncHandler.js";
 import { Task } from "../Models/task.js";
 
 const getAllTasks = asyncHandler(async (req, res) => {
-  const { team_Id } = req.query;
+  const { team_Id } = req.params;
   const tasks = await Task.find({ team_Id });
 
   if (!tasks) {
@@ -14,7 +14,6 @@ const getAllTasks = asyncHandler(async (req, res) => {
 });
 
 const createTask = asyncHandler(async (req, res) => {
-  console.log("Params: ", req.query);
   const { team_Id } = req.query;
   const {
     title,

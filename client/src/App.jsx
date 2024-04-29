@@ -11,11 +11,13 @@ import VoiceChat from "./Pages/VoiceChat";
 import { ChatState } from "./context/Chatprovider";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import TaskForm from "./components/task management/taskForm";
+import TaskList from "./components/task management/tasklist";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "black", // Change this to your desired primary color
+      main: "#000", // Change this to your desired primary color
     },
     secondary: {
       main: "#d3d3d3", // Change this to your desired secondary color
@@ -65,6 +67,8 @@ const App = () => {
               )
             }
           />
+          <Route path="/createTask" element={<TaskForm />} />
+          <Route path="/ListTask" element={<TaskList />} />
         </Routes>
       </div>
     </ThemeProvider>

@@ -1,0 +1,24 @@
+/* taskList.css */
+
+.task-list {
+  padding: 20px;
+}
+
+.task-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.task-item h3 {
+  margin-top: 0;
+}
+
+.task-item p {
+  margin: 5px 0;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
