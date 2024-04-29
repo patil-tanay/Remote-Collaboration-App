@@ -76,13 +76,10 @@ const SingleChat = ({ selectedChat }) => {
     socket.on("stop typing", () => {
       setIsTyping(false);
     });
-    socket.on("share file", (fileUrl) => {
-      // Handle the shared file URL
-      console.log("Shared file:", fileUrl);
-    });
-    return () => {
-      socket.off("share file");
-    };
+
+    // return () => {
+    //   socket.off("share file");
+    // };
   }, []);
 
   useEffect(() => {
@@ -102,6 +99,10 @@ const SingleChat = ({ selectedChat }) => {
       } else {
         setMessages([...messages, newMessageRecieved]);
       }
+    });
+    socket.on("share file", (fileUrl) => {
+      // Update your messages state with the new file message
+      setMessages([...messages, { content: fileUrl, isFile: true }]);
     });
   });
 
