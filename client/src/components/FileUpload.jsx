@@ -3,7 +3,7 @@ import { IconButton } from "@mui/material";
 import AttachFile from "@mui/icons-material/AttachFile";
 import { ChatState } from "../context/Chatprovider";
 import { io } from "socket.io-client";
-import { sendMessage } from "../../../server/Controllers/messageController";
+import axios from "axios";
 export default function FileUploadButton() {
   const ENDPOINT = "http://localhost:5000";
   var socket = io(ENDPOINT);
