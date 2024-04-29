@@ -1,5 +1,7 @@
 import * as React from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function randomID(len) {
   let result = "";
@@ -20,6 +22,7 @@ export function getUrlParams(url = window.location.href) {
 }
 
 export default function VideoCall({ id }) {
+  const navigate = useNavigate();
   const roomID = id;
   let myMeeting = async (element) => {
     // generate Kit Token
