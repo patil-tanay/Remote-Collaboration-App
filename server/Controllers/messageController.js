@@ -3,6 +3,8 @@ import { Chat } from "../Models/chatSchema.js";
 import { Message } from "../Models/messageSchema.js";
 import { User } from "../Models/user.js";
 import ApiError from "../Utils/apiError.js";
+import { UploadOnCloudinary } from "../Utils/cloudinary.js";
+import ApiResponse from "../Utils/apiResponse.js";
 
 const sendMessage = asyncHandler(async (req, res) => {
   const { content, chatId } = req.body;
@@ -45,4 +47,34 @@ const allMessages = asyncHandler(async (req, res) => {
   }
 });
 
-export { sendMessage, allMessages };
+const sendFiles = asyncHandler(async (req, res) => {
+  const { chatId } = req.body;
+  const sender = req.user?.id;
+
+  const localfilePath = req.file?.path;
+  if (!localfilePath) {
+    throw new apiError(400, "No files uploaded");
+  }
+  const file = await UploadOnCloudinary(localfilePath);
+  if (!file.url) {
+    throw new ApiResponsepiError(
+      401,
+      "Error, while uploading file on cloudinary"
+    );
+  }
+
+  const message = new Message({
+    sender,
+    chat: chatId,
+    content: file?.url,
+    isFile: true,
+  });
+
+  await message.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "File uploaded successfully", file.url));
+}); //Responsible for sending files to a chat
+
+export { sendMessage, allMessages, sendFiles };
