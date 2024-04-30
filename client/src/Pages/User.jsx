@@ -16,6 +16,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/MoveToInbox";
 import Avatar from "@mui/material/Avatar";
 import HomeIcon from "@mui/icons-material/Home";
+import DescriptionIcon from "@mui/icons-material/Description";
 import AddIcon from "@mui/icons-material/Add";
 import SettingsIcon from "@mui/icons-material/Settings";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -40,7 +41,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { getSender } from "../config/ChatLogics";
 import { ChatState } from "../context/Chatprovider";
-
+import VideocamIcon from "@mui/icons-material/Videocam";
+import CallIcon from "@mui/icons-material/Call";
 import GroupChatModal from "../components/GroupChatModal";
 import UserProfile from "../components/UserProfile";
 import SingleChat from "../components/SingleChat";
@@ -52,6 +54,9 @@ import Switch from "@mui/material/Switch";
 import UserSelf from "../components/UserSelf";
 import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
+import AddTaskIcon from "@mui/icons-material/AddTask";
+import axios from "axios";
+// import { handleVideo, handleVoice } from "../config/CallLogics";
 // import useLocalStorage from "use-local-storage";
 
 export default function Chatpanel() {
@@ -90,6 +95,53 @@ export default function Chatpanel() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const handleVideo = async (chatId) => {
+    try {
+      const message = `${user.name} is requesting you to join a video call, You can copy the link http://localhost:5173/videochat?roomID=${chatId} or Click on the Video Call Icon above.`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/message",
+        { content: message, chatId: chatId },
+        config
+      );
+
+      console.log(data);
+
+      navigate(`/videochat`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleVoice = async (chatId) => {
+    try {
+      const message = `${user.name} is requesting you to join a voice call, You can copy the link http://localhost:5173/voicechat?roomID=${chatId} or click on the Voice Call Icon above.`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "http://localhost:5000/api/v1/message",
+        { content: message, chatId: chatId },
+        config
+      );
+
+      console.log(data);
+
+      navigate(`/voicechat`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleSearch = async () => {
     try {
       const response = await fetch(
@@ -188,8 +240,54 @@ export default function Chatpanel() {
               ? selectedChat.isGroupChat
                 ? selectedChat.chatName
                 : getSender(loggedUser, selectedChat.users)
-              : "Chat App"}
+              : "Colobo."}
           </Typography>
+          {selectedChat && (
+            <div
+              style={{
+                marginLeft: "58%",
+                display: "flex",
+                gap: "15px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <IconButton
+                onClick={() => {
+                  window.open(
+                    `https://rca-chat-frontend.vercel.app/editor/${selectedChat._id}`
+                  );
+                }}
+              >
+                <DescriptionIcon
+                  sx={{
+                    fontSize: "38px",
+                  }}
+                />
+              </IconButton>
+              <IconButton>
+                <AddTaskIcon
+                  sx={{
+                    fontSize: "38px",
+                  }}
+                />
+              </IconButton>
+              <IconButton onClick={() => handleVideo(selectedChat._id)}>
+                <VideocamIcon
+                  sx={{
+                    fontSize: "38px",
+                  }}
+                />
+              </IconButton>
+              <IconButton onClick={() => handleVoice(selectedChat._id)}>
+                <CallIcon
+                  sx={{
+                    fontSize: "30px",
+                  }}
+                />
+              </IconButton>
+            </div>
+          )}
 
           {selectedChat && selectedChat.isGroupChat && (
             <IconButton sx={{ marginLeft: "auto", padding: "10px" }}>
@@ -269,7 +367,7 @@ export default function Chatpanel() {
                               >
                                 <MoreHorizIcon
                                   sx={{
-                                    color: "var(--background)",
+                                    color: "black",
                                     width: "30px",
                                     height: "30px",
                                   }}
@@ -325,7 +423,7 @@ export default function Chatpanel() {
                                 >
                                   <NotificationsIcon
                                     sx={{
-                                      color: "var(--background)",
+                                      color: "black",
                                       width: "30px",
                                       height: "30px",
                                     }}
@@ -385,7 +483,7 @@ export default function Chatpanel() {
           sx={{ padding: "10px", marginBottom: "5px", marginTop: "auto" }}
           onClick={() => {
             localStorage.removeItem("user");
-            navigate("/desktop-2");
+            navigate("/signin");
           }}
         >
           <Tooltip title="Logout" placement="right">
@@ -431,7 +529,7 @@ export default function Chatpanel() {
               sx={{
                 width: "100%",
                 fontSize: "16px",
-                color: "#751CCA",
+                color: "black",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-start",
@@ -441,7 +539,7 @@ export default function Chatpanel() {
             >
               <SearchIcon
                 sx={{
-                  color: "#751CCA",
+                  color: "black",
                   width: "20px",
                   height: "20px",
                   marginRight: "5px",
@@ -458,6 +556,9 @@ export default function Chatpanel() {
                 fullWidth
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                sx={{
+                  color: "black",
+                }}
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -467,11 +568,12 @@ export default function Chatpanel() {
                     <ListItem
                       key={result._id}
                       sx={{
-                        backgroundColor: "#EDE4F5",
+                        backgroundColor: "#d3d3d3",
                         borderRadius: "10px",
                         margin: "5px 0",
                         padding: "5px 10px",
                         width: "300px",
+                        pointer: "cursor",
                       }}
                       onClick={() => {
                         accessChat(result._id, user);
@@ -492,7 +594,14 @@ export default function Chatpanel() {
             </DialogActions>
           </Dialog>
         </Toolbar>
-        <Divider color="#fff" />
+        <Divider color="#d3d3d3" />
+        <Typography
+          sx={{
+            m: "0 auto",
+          }}
+        >
+          Teams
+        </Typography>
         <List sx={{ px: 1 }}>
           {loading ? (
             <CircularProgress
@@ -508,44 +617,92 @@ export default function Chatpanel() {
             />
           ) : (
             chats &&
-            chats.map((chat) => (
-              <ListItem
-                key={chat._id}
-                sx={{
-                  backgroundColor:
-                    chat === selectedChat ? "var(--background-3)" : "#751CCA",
+            chats
+              .filter((chat) => chat.isGroupChat)
+              .map((chat) => (
+                <ListItem
+                  key={chat._id}
+                  sx={{
+                    backgroundColor: chat === selectedChat ? "white" : "black",
+                    color: chat === selectedChat ? "black" : "white",
 
-                  border: chat === selectedChat ? "1px solid" : "none",
-                  borderColor: "var(--background)",
-                  borderRadius: "6px",
-                  margin: "5px 0",
-                  padding: "5px 10px",
-                }}
-                onClick={() => {
-                  setSelectedChat(chat);
-                }}
-              >
-                <ListItemText>
-                  {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
-                </ListItemText>
-              </ListItem>
-            ))
+                    border:
+                      chat === selectedChat
+                        ? "1px solid black"
+                        : "1px solid white",
+
+                    borderRadius: "6px",
+                    margin: "5px 0",
+                    padding: "5px 10px",
+                  }}
+                  onClick={() => {
+                    setSelectedChat(chat);
+                    console.log(chat);
+                  }}
+                >
+                  <ListItemText>
+                    {!chat.isGroupChat
+                      ? getSender(loggedUser, chat.users)
+                      : chat.chatName}
+                  </ListItemText>
+                </ListItem>
+              ))
           )}
         </List>
+        <Divider color="#d3d3d3" />
+        <Typography
+          sx={{
+            m: "0 auto",
+          }}
+        >
+          People
+        </Typography>
+        <List sx={{ px: 1 }}>
+          {loading ? (
+            <CircularProgress
+              sx={{
+                margin: "20px auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                height: "100%",
+                color: "var(--background)",
+              }}
+            />
+          ) : (
+            chats &&
+            chats
+              .filter((chat) => !chat.isGroupChat)
+              .map((chat) => (
+                <ListItem
+                  key={chat._id}
+                  sx={{
+                    backgroundColor: chat === selectedChat ? "white" : "black",
+                    color: chat === selectedChat ? "black" : "white",
 
-        <List>
-          {[].map((text, index) => (
-            <ListItem key={index} disablePadding>
-              <ListItemButton>
-                <ListItemIcon sx={{ color: "var(--background)" }}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                    border:
+                      chat === selectedChat
+                        ? "1px solid black"
+                        : "1px solid white",
+
+                    borderRadius: "6px",
+                    margin: "5px 0",
+                    padding: "5px 10px",
+                  }}
+                  onClick={() => {
+                    setSelectedChat(chat);
+                    console.log(chat);
+                  }}
+                >
+                  <ListItemText>
+                    {!chat.isGroupChat
+                      ? getSender(loggedUser, chat.users)
+                      : chat.chatName}
+                  </ListItemText>
+                </ListItem>
+              ))
+          )}
         </List>
       </Drawer>
 

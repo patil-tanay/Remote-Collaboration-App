@@ -18,7 +18,7 @@ import * as typingAnimation from "../animations/typer.json";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-
+import FileUploadButton from "./FileUpload";
 const ENDPOINT = "http://localhost:5000";
 var socket, selectedChatCompare;
 
@@ -47,12 +47,12 @@ const SingleChat = ({ selectedChat }) => {
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
       };
       setLoading(true);
       const { data } = await axios.get(
-        `http://localhost:5000/api/message/${selectedChat._id}`,
+        `http://localhost:5000/api/v1/message/${selectedChat._id}`,
         config
       );
       setMessages(data);
@@ -76,6 +76,10 @@ const SingleChat = ({ selectedChat }) => {
     socket.on("stop typing", () => {
       setIsTyping(false);
     });
+
+    // return () => {
+    //   socket.off("share file");
+    // };
   }, []);
 
   useEffect(() => {
@@ -96,6 +100,10 @@ const SingleChat = ({ selectedChat }) => {
         setMessages([...messages, newMessageRecieved]);
       }
     });
+    socket.on("share file", (fileUrl) => {
+      // Update your messages state with the new file message
+      setMessages([...messages, { content: fileUrl, isFile: true }]);
+    });
   });
 
   const sendMessage = async (e) => {
@@ -106,18 +114,17 @@ const SingleChat = ({ selectedChat }) => {
         const config = {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user.accessToken}`,
           },
         };
         setNewMessage("");
         const { data } = await axios.post(
-          "http://localhost:5000/api/message",
+          "http://localhost:5000/api/v1/message",
           { content: newMessage, chatId: selectedChat._id },
           config
         );
         console.log(data);
         socket.emit("new message", data);
-
         setMessages([...messages, data]);
       } catch (error) {
         console.log(error);
@@ -175,7 +182,7 @@ const SingleChat = ({ selectedChat }) => {
               <ScrollableChat messages={messages} />
             </div>
           )}
-          {isTyping ? (
+          {/* {isTyping ? (
             <Lottie
               animationData={typingAnimation}
               style={{
@@ -187,7 +194,7 @@ const SingleChat = ({ selectedChat }) => {
             />
           ) : (
             <></>
-          )}
+          )} */}
           {emojiPicker && (
             <div>
               <Picker
@@ -219,7 +226,7 @@ const SingleChat = ({ selectedChat }) => {
                 }}
               />
             </IconButton>
-
+            <FileUploadButton />
             <Paper
               component="form"
               sx={{
@@ -277,8 +284,8 @@ const SingleChat = ({ selectedChat }) => {
             padding: "0 30px",
           }}
         >
-          <h1>Chat App</h1>
-          <p>Click on a chat to start messaging</p>
+          <h1>Remote Collaboration App</h1>
+          <p>Click on a user/group to start Collaborating</p>
         </Box>
       )}
     </>
